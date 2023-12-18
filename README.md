@@ -1,70 +1,127 @@
-# Getting Started with Create React App
+# React Component Library
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This component library is reusable code that are accessible and can be used across a number of different React projects in order to ensure brand and design consistency and speed up development through reusability. The components are created and updated to meet the [React Playbook](https://bitbucket.org/deloittedigitalcanada/dstudio-react-playbook/src/main/).
 
-## Available Scripts
+A table of the components is available on the projects [confluence](https://deloittedigital.atlassian.net/wiki/spaces/PEA/pages/2908881101/Component+Library) page. In the table it shows which components have unit tests and which ones meet accessibility standards.
 
-In the project directory, you can run:
+### Technologies used:
 
-### `npm start`
+- React
+- Storybook
+- Prettier
+- Jest
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+# Clone Repository
+$ git clone https://[bitbucket_user_name]@bitbucket.org/deloittedigitalcanada/react-fe-accelerator.git
+```
 
-### `npm test`
+```bash
+# Install Packages
+$ npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+# Run locally
+$ npm start
+```
 
-### `npm run build`
+# Developing & Documenting
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Component Best Practices
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The folder sturcture for the components will look like the following:
 
-### `npm run eject`
+```
+...
+├── components
+│   ├── Card
+│   │   ├── index.jsx            # exports the default component
+│   │   ├── Card.stories.jsx     # story file to be used for development
+│   │   ├── Card.jsx             # main component file
+│   │   └── Card.test.js         # unit tests to check component rendering
+...
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- All component-related files should have a `.jsx` file entension
+- Place variants in the folder of its associated component and add to the exports in `index.jsx` (e.g. a Button can have a `Primary` and `Secondary` variant, etc. which can live in a `Buttons` folder)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+...
+├── components
+|   ├── Buttons
+│   |   ├── GroupButton
+│   │   |   ├── index.jsx                   # exports the default component
+│   │   |   ├── GroupButton.stories.jsx     # story file to be used for development
+│   │   |   ├── GroupButton.jsx             # main component file
+│   │   |   └── GroupButton.test.js         # unit tests to check component rendering
+...
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Imports
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Please use absolute imports instead of releatice imports.
+- Please import files in a consistent way for code readability across files.
+- Built-in hooks like `useState` and `useEffect` can be imported at the top of the file instead of in the code like `React.useState`
 
-## Learn More
+Suggested import order:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```jsx
+// built-in
+import { useState, useEffect } from 'react'
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// internal components, helpers, styles, assets
+import Link from 'components/Link' // <--- Absolute Imports
+```
 
-### Code Splitting
+## Naming
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Naming conventions provide consistency betweens components.
 
-### Analyzing the Bundle Size
+#### Variables
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| Type     | Convention                | Examples                    | Description                                                                |
+| -------- | ------------------------- | --------------------------- | -------------------------------------------------------------------------- |
+| Regular  | `camelCase`               | `defaultChecked`, `inputId` | Boolean variables start with a verb, followed by the state to test against |
+| Constant | `ALL_CAPS_SNAKE_CASE`     | `INPUT_TYPES`               | Constant variables (not objects) are all uppercased                        |
+| Boolean  | `is<State>`, `has<State>` | `isActive`, `hasError`      | Boolean variables start with a verb, followed by the state to test against |
 
-### Making a Progressive Web App
+#### React Props
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Same as variables naming, plus:
 
-### Advanced Configuration
+| Type              | Convention        | Examples                          | Description                                                                            |
+| ----------------- | ----------------- | --------------------------------- | -------------------------------------------------------------------------------------- |
+| Native attributes | Keep as is        | `<TextInput required disabled />` | We do not alter the properties that we pass down to the native HTML elements           |
+| React event       | Keep as is        | `onChange`, `onClick`             | We do not alter the React event names                                                  |
+| Custom event      | `on<Event>`       | `onError`, `onOpen`               | We keep the React event naming convention for our custom events                        |
+| Render prop       | `render<Element>` | `renderInput`                     | We prefix the prop that renders an element with `render`, followed by the element name |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+#### Functions
 
-### Deployment
+| Type          | Convention            | Examples                                  | Description                                                                              |
+| ------------- | --------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Hooks         | `<name>`, `set<Name>` | `[formattedAddress, setFormattedAddress]` | Declare a new state variable alongside its state setter                                  |
+| Event handler | `on<Event>Handler`    | `onClickHandler`, `onOpenHandler`         | Event props are prefixed with `on` and suffixed with `Handler` to denote it's a callback |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Storybook
 
-### `npm run build` fails to minify
+This repository uses [storybook](https://storybook.js.org/) to document and provide a playground to visually see the components. [See the guide for writing stories](https://storybook.js.org/docs/react/writing-stories/introduction)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+# Start storybook environment
+$ npm run storybook
+```
+
+### Testing
+
+To manually run tests simply use the following command in the root directory
+
+```bash
+# Run Jest and React Library tests
+$ npm run test
+```
